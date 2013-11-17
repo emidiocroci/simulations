@@ -57,4 +57,20 @@ class CircuitSuite extends CircuitSimulator with FunSuite {
     testOr(orGate)
     testOr(orGate2)
   }  
+
+  test("demux") {
+    val in = new Wire
+    val out = List(new Wire)
+    demux(in, Nil, out)
+    in.setSignal(false)
+    run
+    assert(out(0).getSignal === false, "empty control 1")
+    in.setSignal(true)
+    run
+    assert(out(0).getSignal === true, "empty control 2")
+
+    val ctrl = List(new Wire)
+    val out2 = List(new Wire, new Wire)
+    demux(in,ctrl,out2)
+  }  
 }

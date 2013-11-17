@@ -82,17 +82,20 @@ abstract class CircuitSimulator extends Simulator {
     a2 addAction orAction
   }
 
-  def demux(in: Wire, c: List[Wire], out: List[Wire]) {
-    ???
-    /*def demuxAction(ctrl: List[Wire]) {
+  def demux(in: Wire, c: List[Wire], out: List[Wire]) {    
+    def demuxBlock(ctrl: List[Wire]) {
       ctrl match {
-        case Nil => out = (in)
+        case Nil => andGate(in, in, out(0))
+        case _ =>
       }
     }
 
-    out foreach setSignal 
-    in addAction demuxAction(c)*/
-  }
+    def demuxAction() {
+      demuxBlock(c)
+    }
+    in addAction demuxAction
+    c.foreach(ctrl => ctrl addAction demuxAction )
+  }  
 
 }
 
