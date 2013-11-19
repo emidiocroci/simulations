@@ -77,25 +77,35 @@ abstract class CircuitSimulator extends Simulator {
       inverter(a2, inv2)
       andGate(inv1, inv2, invOut)
       inverter(invOut, output)      
-    }
-    a1 addAction orAction
-    a2 addAction orAction
+    }    
   }
 
-  def demux(in: Wire, c: List[Wire], out: List[Wire]) {    
-    def demuxBlock(ctrl: List[Wire]) {
+  def demux(in: Wire, c: List[Wire], out: List[Wire]) {
+    def demuxBlock(ctrl: List[Wire]){ 
       ctrl match {
-        case Nil => andGate(in, in, out(0))
-        case _ =>
+        case Nil => 
+        {                     
+          out.foreach(andGate(in, in, _))
+        }
+        case x::xs => {             
+          val index = scala.math.pow(2,xs.length + 1) -1          
+          val index2 = scala.math.pow(2,xs.length) - 1
+          demuxBlock(xs)          
+          val invX = new Wire
+          inverter(x,invX)
+          andGate(in, x, out(index.toInt)) 
+          andGate(in, invX, out(index2.toInt)) 
+        }
       }
     }
 
     def demuxAction() {
       demuxBlock(c)
     }
+    
     in addAction demuxAction
-    c.foreach(ctrl => ctrl addAction demuxAction )
-  }  
+    c.foreach(x => x.addAction(demuxAction))
+  }
 
 }
 
