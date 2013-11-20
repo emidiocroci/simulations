@@ -103,7 +103,7 @@ class EpidemySimulator extends Simulator {
     }
 
     def startMove() {
-      if(infected)
+      if(infected && !dead)
         afterDelay(incubationTime){ imSick }
       if(!dead){
         afterDelay(waitToMove) { completeMove }

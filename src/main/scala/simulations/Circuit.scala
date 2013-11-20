@@ -85,10 +85,14 @@ abstract class CircuitSimulator extends Simulator {
     c match {
       case Nil => out.foreach(andGate(in, in, _))
       case x::xs => {
-        val invX = new Wire
+        val invX, left, right = new Wire
         inverter(x, invX)
-        demux(x, xs, out.takeRight(out.length / 2))
-        demux(invX, xs, out.take(out.length / 2))
+        andGate(in, x, left)
+        andGate(in, invX, right)
+        var fHalf = out.take(out.length / 2)
+        var sHalf = out.takeRight(out.length / 2)
+        demux(left, xs, fHalf)
+        demux(right, xs, sHalf)
       }
     }      
   }

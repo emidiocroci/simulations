@@ -80,5 +80,18 @@ class CircuitSuite extends CircuitSimulator with FunSuite {
     run
     assert(out2(0).getSignal === true, "one ctrl on 1")    
     assert(out2(1).getSignal === false, "one ctrl on 2")
+
+    val in3 = new Wire 
+    val ctrl3 = (0 until 3).map(i => new Wire).toList
+    val out3 = (0 until 8).map(i => new Wire).toList
+    demux(in3,ctrl3,out3)
+    in3.setSignal(true)
+    ctrl3(2).setSignal(true)
+    run
+    assert(out3(3).getSignal === true, "one ctrl on 3")    
+    ctrl3(1).setSignal(true)
+    ctrl3(0).setSignal(true)
+    run
+    assert(out3(7).getSignal === true, "one ctrl on 3")    
   }  
 }
